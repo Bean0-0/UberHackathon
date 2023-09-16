@@ -6,10 +6,23 @@
         <title>Uber Hackathon</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <link rel="stylesheet" href="styles.css">
+
+        <!--mapbox-->
+        
+        <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+
+        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
+        <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css" type="text/css">
+
+
+
         <script src="eel.js"></script>
     </head>
 
     <body>
+        <div id='map' style='width: 650px;margin:auto; aspect-ratio: 1;'></div>
+
         <h1>Hello World🎉</h1>
         <p>Enter starting address</p>
         <input id="startInp"><button onclick="askLocation('start')">Search</button>
