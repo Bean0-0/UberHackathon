@@ -5,3 +5,12 @@
     --accentwarm: #dd614aff;
     --accentcool: #32936fff;
 }
+
+
+.mapbox-directions-component{
+    display: none;
+}
+
+.mapbox-directions-instructions{
+    display: none;
+}
