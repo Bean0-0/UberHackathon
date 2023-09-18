@@ -1,11 +1,17 @@
 :root {
     --primary: #273043ff;
     --secondary: #727a97ff;
-    --background: #eff6eeff;
+    --background: #f5f9ff;
     --accentwarm: #dd614aff;
-    --accentcool: #32936fff;
+    --accentcool: #38db9f;
 }
 
+body{
+    margin: 0;
+    background:var(--background);
+    color:var(--primary);
+    font-family: 'Poppins';
+}
 
 .mapbox-directions-component{
     display: none;
@@ -13,4 +19,115 @@
 
 .mapbox-directions-instructions{
     display: none;
+}
+
+
+#content{
+    max-width: 500px;
+    margin: auto;
+    height: 100vh;
+    display: grid;
+    align-content: center;
+    padding:20px;
+}
+
+#map{
+    width:100%;
+    height: 500px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgb(0,0,50,0.1);
+    border:2px solid rgb(0,0,50,0.3);
+}
+
+#bottomBar{
+    padding: 20px;
+}
+
+#bottomBar input{
+    padding: 10px;
+    font-family: 'Poppins';
+    outline: none;
+    width: 100%;
+    border: none;
+    background: #dee2f5;
+    padding: 15px;
+    border-radius: 15px;
+    /* font-size: 16px; */
+    /* background: transparent; */
+    /* border: 2px solid rgb(0,0,0,0.2); */
+}
+
+.inputHolder{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputHolder button{
+    display: none;
+}
+
+
+.markerDot{
+    width: 10px;
+    border-radius: 50%;
+    border: 4px solid var(--accentcool);
+    margin-right: 10px;
+    aspect-ratio: 1;
+}
+
+.markerSep{
+    background: var(--accentcool);
+    width: 5px;
+    height: 5px;
+    margin-left: 6px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.confirmButton{
+    width: 100%;
+    padding: 15px;
+    font-family: 'Poppins';
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: lighter;
+    color: var(--background);
+    margin-top: 30px;
+    background: var(--primary);
+}
+
+
+#carDisplay{
+    display:flex;
+    justify-content:space-between;
+}
+
+#carInfo{
+    width:300px;
+}
+
+#carPlate{
+    margin: 0;
+    font-weight: lighter;
+    /* opacity: .7; */
+    width: fit-content;
+    padding: 7px;
+    background: var(--primary);
+    color: var(--background);
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#carName{
+    font-weight:800;
+    margin:0;
+}
+
+#carDisplay img{
+    width:200px;
 }
