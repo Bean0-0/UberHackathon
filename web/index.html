@@ -15,19 +15,39 @@
         <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
         <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css" type="text/css">
 
+        <!-- car data -->
+        <script src="car-data.js"></script>
+
 
 
         <script src="eel.js"></script>
     </head>
 
     <body>
-        <div id='map' style='width: 650px;margin:auto; aspect-ratio: 1;'></div>
+        <div id="content">
+            <div id='map'></div>
 
-        <h1>Hello World🎉</h1>
-        <p>Enter starting address</p>
-        <input id="startInp"><button onclick="askLocation('start')">Search</button>
-        <p>Enter ending address</p>
-        <input id="endInp"><button onclick="askLocation('end')">Search</button>
+            <div id="bottomBar">
+                <div class="inputHolder">
+                    <div class="markerDot"></div>
+                    <input id="startInp" placeholder="Enter starting address...">
+                    <button onclick="askLocation('start')">Search</button>
+                </div>
+
+                <div class="markerSep"></div>
+                <div class="markerSep"></div>
+                <div class="markerSep" style="margin-bottom:0"></div>
+
+                <div class="inputHolder">
+                    <div class="markerDot"></div>
+                    <input id="endInp" placeholder = "Enter ending address...">
+                    <button onclick="askLocation('end')">Search</button>
+                </div>
+
+                <button class="confirmButton" onclick="displayCar(generateDriver([0,0]))">Confirm Route</button>
+
+            </div>
+        </div>
 
         <script src="script.js"></script>
     </body>
