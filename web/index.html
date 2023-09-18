@@ -1,13 +1,34 @@
 <!DOCTYPE html>
-<head>
-    <html lang="en">
-    <meta charset="UTF-8">
-    <title>Page <Title></Title></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
-</head>
+<html>
+    <head>
+        <html lang="en">
+        <meta charset="UTF-8">
+        <title>Uber Hackathon</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="stylesheet" href="styles.css">
 
-<body>
+        <!--mapbox-->
+        
+        <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
 
-</body>
+        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
+        <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css" type="text/css">
+
+
+
+        <script src="eel.js"></script>
+    </head>
+
+    <body>
+        <div id='map' style='width: 650px;margin:auto; aspect-ratio: 1;'></div>
+
+        <h1>Hello World🎉</h1>
+        <p>Enter starting address</p>
+        <input id="startInp"><button onclick="askLocation('start')">Search</button>
+        <p>Enter ending address</p>
+        <input id="endInp"><button onclick="askLocation('end')">Search</button>
+
+        <script src="script.js"></script>
+    </body>
 </html>
