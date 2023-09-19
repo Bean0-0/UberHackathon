@@ -25,11 +25,17 @@
 
         <!-- icons -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="icon" type="image/x-icon" href="assets/branding/logo-r.png">
 
         <script src="eel.js"></script>
     </head>
 
     <body>
+
+        <div id="navbar">
+            <h2 id="logo" onclick="location.reload()"><img src='assets/branding/logo-s.png'>Caravan</h2>
+        </div>
+
         <div id="content">
             <div id="header">
                 <h1 id="title">Where are you headed?</h1>
@@ -53,7 +59,7 @@
                     <button onclick="askLocation('end')">Search</button>
                 </div>
 
-                <button class="confirmButton" onclick="displayCar(generateDriver([0,0]))">Let's Go!</button>
+                <button class="confirmButton" onclick="displayCar(generateDriver())">Let's Go!</button>
             </div>
 
             <button class="helpButton">

@@ -1,9 +1,11 @@
+let startLocation = "";
+let endLocation = "";
+//track start and end locations
 
-
-
-//mapboxgl.accessToken = 'ACCESS_TOKEN';
+//mapboxgl.accessToken = 'pk.eyJ1Ijoic2hpbG9ob2xvdHUiLCJhIjoiY2xtbGZ0c2NrMGFvNjJpbzR5cDE2aTgyNyJ9.LKo2hgRUkf5NfAvOLf1GSg';
 //navigator.geolocation.getCurrentPosition(successLoc, errorLoc,{ enableHighAccuracy: true});
 
+//if the location is successful gained from the user
 function successLoc(pos){
     console.log(pos);
     console.log(pos.coords.longitude, pos.coords.latitude);
@@ -13,7 +15,7 @@ function successLoc(pos){
 function errorLoc(){
 
 }
-
+//draws the map around a center coordinate
 function setupMap(center){
     document.getElementById('map').innerHTML = "";
     const map = new mapboxgl.Map({
@@ -41,18 +43,11 @@ function setupMap(center){
         }
     }
 
-    //hide ui we dont want
-    for(element of document.getElementsByClassName("mapbox-directions-component")){
-        element.style["display"] = "none";
-    }
-    for(element of document.getElementsByClassName("mapbox-directions-instructions")){
-        element.style["display"] = "none";
-    }
-
 
  
 
 }
+
 
 //keyboard events to simulate search in mapbox
 const spaceEvent = new KeyboardEvent('keydown', {
@@ -120,14 +115,14 @@ function scoreCar(id){//scores car co2 emissions out of severe, poor, average, g
 	}
 	const diff = carData[id] - carData['avg'];
 
-	if(Math.abs(diff) <= carData['dev']) return "Average";//within avg deviation
+	if(Math.abs(diff) <= carData['dev'] * .5) return "Average";//within avg deviation
 
-	if(carData[id] > carData['avg'] + carData['dev']){
+	if(carData[id] > carData['avg'] + carData['dev'] *.5){
 		if(carData[id]> carData['avg'] + (carData['dev'] * 1.7)) return "Severe";
 		return "Poor";
 	}
 
-	if(carData[id] < carData['avg'] - carData['dev']){
+	if(carData[id] < carData['avg'] - carData['dev'] *.5){
 		if(carData[id] < carData['avg'] - (carData['dev'] * 1.7)) return "Excellent";
 		return "Good";
 	}
@@ -171,7 +166,7 @@ elderly
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const numbers = "0123456789";
-function generateDriver(target){//generates a random driver relatively close to a target
+function generateDriver(){//generates a random driver
     //random car
     const cars = Object.keys(carData);
     const car = cars[parseInt(cars.length * Math.random())];
@@ -184,10 +179,6 @@ function generateDriver(target){//generates a random driver relatively close to 
     //random person
     const gender = randChoice(["male","female"]);
     const name = randChoice(names[gender]) + " " + randChoice(names["last"]);
-
-    //random positions
-    const lon = target[0] + (.3 * Math.random());
-    const lat = target[1] + (.3 * Math.random());
 
     ///random accomodations
     const accom = {
@@ -202,14 +193,48 @@ function generateDriver(target){//generates a random driver relatively close to 
 
     }
 
-    return [name, car, carName, plate, score, accom, [lon,lat]];
+    return [name, car, carName, plate, score, accom];
 
 }
 
-
+let currentDriver = null;
 
 function displayCar(carInfo){
+    document.getElementById("title").innerHTML = "Driver Found!";
+    //keep track of current driver
+    currentDriver = carInfo;
+    //hide the map
     document.getElementById("map").style["display"] = "none";
+    document.getElementById("map").style["pointerEvents"] = "none";
+
+    //to display the environmental score, we pregenerate the html
+    let envDots = "";
+    let numDots = 1;
+    let envBg = '--accentcool';
+
+    const scores = ["Severe","Poor","Average","Good","Excellent"];
+    while(scores[numDots-1] != carInfo[4]){//find number of dots corresponding with score of car
+        numDots++;
+    }
+
+    for(let i = 0; i < numDots; i++){
+        envDots += "<div class='fullDot'></div>";
+    }
+    for(let i = numDots; i < 5; i++){
+        envDots += "<div class='empytDot'></div>";
+    }
+
+    //color the env score based on score
+    if(numDots < 3) envBg = '--warning-orange';
+    if(numDots ==3 ) envBg = '--average-yellow';
+
+
+    let accom = "";
+    for(let key in carInfo[5]){
+        if(carInfo[5][key]){
+            accom += `<p class='accom'><img src='assets/svg/check.svg'>${capitalize(key)}</p>`
+        }
+    }
     document.getElementById("bottomBar").innerHTML = `
     <div id='carDisplay'>
         <div id='carInfo' style=''>
@@ -220,9 +245,26 @@ function displayCar(carInfo){
 
     </div>
 
-    <p style='font-weight:800;opacity:.5'>ACCESSIBILITY ACCOMODATIONS</p>
-    <p>
+    <br>
+
+    <p style='font-weight:800;opacity:.7;margin-bottom:0'>ENVIRONMENTAL SCORE</p>
+    <p style='margin-top:0;opacity:.5'>This car has the following impact on the environment...</p>
+    <div id='envScore' style='background:var(${envBg})'>
+        <img src='assets/svg/leaf.svg'>
+        ${envDots}
+        <p>${capitalize(carInfo[4])}</p>
+    </div>
+
+    <br><br>
+
+    <p style='font-weight:800;opacity:.7;margin-bottom:0'>ACCESSIBILITY ACCOMODATIONS</p>
+    <p style='margin-top:0;opacity:.5'>This driver accommodates for the following...</p>
+    ${accom}
 
     <button class='confirmButton'>Confirm Ride</button>
     `
+}
+
+function displayDriver(){
+    document.getElementById("map").style["display"] = "block";
 }
