@@ -2,7 +2,7 @@ let startLocation = "";
 let endLocation = "";
 //track start and end locations
 
-//mapboxgl.accessToken = 'pk.eyJ1Ijoic2hpbG9ob2xvdHUiLCJhIjoiY2xtbGZ0c2NrMGFvNjJpbzR5cDE2aTgyNyJ9.LKo2hgRUkf5NfAvOLf1GSg';
+//mapboxgl.accessToken = 'ACCESS_KEY';
 //navigator.geolocation.getCurrentPosition(successLoc, errorLoc,{ enableHighAccuracy: true});
 
 //if the location is successful gained from the user
