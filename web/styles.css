@@ -146,11 +146,14 @@ body{
 /*USER INFO SCREEN */
 #userIcon{
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 10px;
+    right: 10px;
     width: 40px;
     cursor: pointer;
+    padding: 10px;
     z-index: 1000;
+    border-radius: 50%;
+    background:#f5f9ffe0;
 }
 
 #infoScreen{
