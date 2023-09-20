@@ -24,16 +24,16 @@ function setupMap(center){
         zoom:17
     });
 
-    const nav = new mapboxgl.NavigationControl();
+    const nav = new mapboxgl.NavigationControl();//nav buttons
     map.addControl(nav);
 
     const directions = new MapboxDirections({
         accessToken:mapboxgl.accessToken
     })
 
-    map.addControl(directions,"top-left");
+    map.addControl(directions,"top-left");//hidden location inputs
 
-    for(element of document.getElementsByTagName("input")){
+    for(element of document.getElementsByTagName("input")){//give ids to hidden location inputs
         if(element.getAttribute("placeholder") == "Choose a starting place"){
             element.id="hiddenStartInp";
         }
@@ -104,7 +104,7 @@ document.getElementById("endInp").addEventListener("keypress",function(event){
 
 
 //scoreing cars
-function scoreCar(id){//scores car co2 emissions out of severe, poor, average, good, excellent 
+function scoreCar(id){//scores car co2 emissions out of severe, poor, average, good, excellent  using avg deviation
 	if(!(id in carData)){
 		return "Not available";
 	}
@@ -132,7 +132,7 @@ const names = {
     "last":["Smith","Garcia","Kim", "Muller", "Li", "Sago", "Singh", "Rossi", "Lopez", "Nguyen", "Martinez", "Gonzalez", "Chen", "Kowalski", "Abe", "Ivanov", "Ferreira", "Ahmed", "Olsen", "Fuentes"]
 }
 
-function capitalize(s){
+function capitalize(s){//capitalize strings
     let t = "";
     for(let i = 0; i < s.length; i++){
         if(i == 0 || s[i-1] == ' '){
@@ -144,7 +144,7 @@ function capitalize(s){
     return t;
 }
 
-function randChoice(arr){
+function randChoice(arr){//random choice from array
     return arr[parseInt(Math.random() * arr.length)];
 }
 
@@ -179,7 +179,7 @@ function generateDriver(){//generates a random driver
 
     }
 
-    const time = 5 + parseInt(Math.random()*4);
+    const time = 5 + parseInt(Math.random()*4);//random time
 
     return [name, car, carName, plate, score, accom, time];
 
@@ -271,7 +271,7 @@ function displayCar(carInfo){
     <div class='gap'></div>
     `;
 
-    displayModal(html);
+    displayModal(html);//load modal popup
 
 }
 
