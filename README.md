@@ -4,7 +4,7 @@ ___
 **Caravan** is a groundbreaking transportation application that allows users to access ride-sharing services seamlessly while ensuring accessibility, promoting environmental sustainability, and preventing discrimination. Just like a real caravan where people travel together, Caravan brings passengers and drivers together to create a sense of inclusion in the ride-sharing world.
 
 ## Set up and Troubleshooting
-Caravan is Node web application, so to run it on your local machine, make sure you have [downloaded node.js](https://nodejs.org/).
+Caravan is a Node web application, so to run it on your local machine, make sure you have [downloaded node.js](https://nodejs.org/).
 Here are the steps for set up, assuming you have installed Node
 
 1. **Install the dependencies** by running `npm install` in the root directory.
