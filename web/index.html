@@ -7,6 +7,9 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <link rel="stylesheet" href="styles.css">
 
+        <!-- jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
         <!--mapbox-->
         
         <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
@@ -25,20 +28,61 @@
 
         <!-- icons -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-        <link rel="icon" type="image/x-icon" href="assets/branding/logo-r.png">
+        <link rel="icon" type="image/x-icon" href="assets/branding/logo-sr.png">
 
         <script src="eel.js"></script>
     </head>
 
     <body>
 
-        <div id="navbar">
-            <h2 id="logo" onclick="location.reload()"><img src='assets/branding/logo-s.png'>Caravan</h2>
+        <!-- logo screen -->
+        <div id="logoScreen">
+            <h2 id="logo"><img src='assets/branding/logo-s.png'>Caravan</h2>
+            <p>Share the Journey.</p>
         </div>
+
+        <!-- introduction screen -->
+        <div id="introScreen">
+            <div id="introContent">
+
+            </div>
+        </div>
+
+        <!-- user information screen -->
+        <img id="userIcon" src="assets/svg/user.svg" onclick="toggleInfoScreen()">
+        <div id="infoScreen">
+            <div id="infoContent">
+
+                <div class="gap"></div>
+                
+                <h2>Name</h2>
+                <p>This name is what drivers will see on your requests.</p>
+                <input id="nameInput">
+                <button class="confirmButton" onclick="saveNameSetting()">Save Name</button>
+
+                <div class="smallGap"></div>
+
+                <h2>Accessibility Accommodations</h2>
+                <p>This helps you match with drivers that better fit your needs.</p>
+                <div id="userAccessibility"></div>
+            </div>
+        </div>
+        
+        <!-- loading popup -->
+        <div id="loadingPopup">
+            <p>Finding driver...</p>
+        </div>
+
+        <!-- popup bar that displays car information -->
+        <div id="modal">
+            <div id="modalContent"></div>
+        </div>
+
+        <!-- main content sections: map and location inputs-->
 
         <div id="content">
             <div id="header">
-                <h1 id="title">Where are you headed?</h1>
+                <h1 id="title">Welcome back, user</h1>
             </div>
             <div id='map'></div>
 
@@ -50,7 +94,6 @@
                 </div>
 
                 <div class="markerSep"></div>
-                <div class="markerSep"></div>
                 <div class="markerSep" style="margin-bottom:0"></div>
 
                 <div class="inputHolder">
@@ -58,24 +101,31 @@
                     <input id="endInp" placeholder = "Enter ending address...">
                     <button onclick="askLocation('end')">Search</button>
                 </div>
+                <br><br><br><br>
 
-                <button class="confirmButton" onclick="displayCar(generateDriver())">Let's Go!</button>
+                <button class="confirmButton" onclick="verifyRoute()">Let's Go!</button>
+                <p id="warning">You must enter a valid route before ordering a ride.</p>
             </div>
 
+            <!--
             <button class="helpButton">
                 <span class="material-symbols-outlined" id="infoIcon">info</span>
             </button>
+
+            -->
             
         </div>
 
-        <div id="infoModal" class="modal">
-            <div class="modal-content">
-                <span class="material-symbols-outlined" id="closeInfo">close</span>
-                <h1>Welcome to Caravan!</h1>
-            </div>
-        </div>
-
+        <script>
+            setTimeout(function(){
+                document.getElementById("logoScreen").style["opacity"] = 0;
+                document.getElementById("logoScreen").style["pointer-events"] = "none";
+            },2000);
+            if(localStorage.getItem("name") != null) $("#title").text("Welcome back, " + localStorage.getItem("name").split(" ")[0]);
+        </script>
+        
         <script src="script.js"></script>
         <script src="modal.js"></script>
+        <script src="intro.js"></script>
     </body>
 </html>
