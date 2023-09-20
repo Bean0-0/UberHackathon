@@ -2,19 +2,18 @@ let startLocation = "";
 let endLocation = "";
 //track start and end locations
 
-//mapboxgl.accessToken = 'ACCESS_KEY';
-//navigator.geolocation.getCurrentPosition(successLoc, errorLoc,{ enableHighAccuracy: true});
+mapboxgl.accessToken = 'ACCESS-KEY';
+navigator.geolocation.getCurrentPosition(successLoc, errorLoc,{ enableHighAccuracy: true});
 
 //if the location is successful gained from the user
 function successLoc(pos){
-    console.log(pos);
-    console.log(pos.coords.longitude, pos.coords.latitude);
     setupMap([pos.coords.longitude,pos.coords.latitude]);
 }
 
 function errorLoc(){
-
+    alert("You must allow location tracking to unlock functionality");
 }
+
 //draws the map around a center coordinate
 function setupMap(center){
     document.getElementById('map').innerHTML = "";
@@ -68,6 +67,7 @@ const enterEvent = new KeyboardEvent('keydown', {
     bubbles: true
 });
 
+//entering location in inputs
 function askLocation(typ){
     let inp = document.getElementById("startInp").value;
     let hiddenInp = document.getElementById("hiddenStartInp");
@@ -78,7 +78,7 @@ function askLocation(typ){
 
 
     hiddenInp.value = inp;
-    //Some weird simulation stuff
+    //sends values to hidden inputs in map
     hiddenInp.dispatchEvent(spaceEvent);
     setTimeout(function(){
         hiddenInp.dispatchEvent(enterEvent);
@@ -86,6 +86,7 @@ function askLocation(typ){
     
 }
 
+//bind search events to enter key press
 document.getElementById("startInp").addEventListener("keypress",function(event){
     if(event.key == "Enter"){
         askLocation("start");
@@ -99,13 +100,7 @@ document.getElementById("endInp").addEventListener("keypress",function(event){
 });
 
 
-function recieveLocation(resp){
-    console.log(resp);
-    setupMap([resp[1][0],resp[1][1]]);
-}
 
-
-eel.expose(recieveLocation);
 
 
 //scoreing cars
@@ -153,16 +148,7 @@ function randChoice(arr){
     return arr[parseInt(Math.random() * arr.length)];
 }
 
-/*
-blind
-deaf
-non-verbal
-service animal
-wheelchair
-neurodivergent
-infant
-elderly
-*/
+
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const numbers = "0123456789";
@@ -193,18 +179,19 @@ function generateDriver(){//generates a random driver
 
     }
 
-    return [name, car, carName, plate, score, accom];
+    const time = 5 + parseInt(Math.random()*4);
+
+    return [name, car, carName, plate, score, accom, time];
 
 }
 
 let currentDriver = null;
 
 function displayCar(carInfo){
-    document.getElementById("title").innerHTML = "Driver Found!";
     //keep track of current driver
     currentDriver = carInfo;
     //hide the map
-    document.getElementById("map").style["display"] = "none";
+    //document.getElementById("map").style["display"] = "none";
     document.getElementById("map").style["pointerEvents"] = "none";
 
     //to display the environmental score, we pregenerate the html
@@ -228,6 +215,17 @@ function displayCar(carInfo){
     if(numDots < 3) envBg = '--warning-orange';
     if(numDots ==3 ) envBg = '--average-yellow';
 
+    //generate an explanation of score
+    const explanations = [
+        `This car produces significantly more CO2 than the average car (${parseInt(carData[carInfo[1]])} g/km).`,
+        `This car produces notably more CO2 than the average car (${parseInt(carData[carInfo[1]])} g/km).`,
+        `This car produces about the same amount of CO2 of average car (${parseInt(carData[carInfo[1]])} g/km).`,
+        `This car produces notably less CO2 than the average car (${parseInt(carData[carInfo[1]])} g/km).`,
+        `This car produces significantly less CO2 than the average car (${parseInt(carData[carInfo[1]])} g/km).`,
+];
+    let scoreExplain = explanations[numDots-1];
+    
+
 
     let accom = "";
     for(let key in carInfo[5]){
@@ -235,36 +233,142 @@ function displayCar(carInfo){
             accom += `<p class='accom'><img src='assets/svg/check.svg'>${capitalize(key)}</p>`
         }
     }
-    document.getElementById("bottomBar").innerHTML = `
+    const html = `
+    <div class='horBar'></div>
+
     <div id='carDisplay'>
         <div id='carInfo' style=''>
             <p id='carName'>${carInfo[2]}</p>
-            <p id='carPlate'>${carInfo[3]}</p>
+            <p id='carPlate'>${carInfo[6]} min away</p>
         </div>
-        <img src='assets/car.png'>
-
+        <img src='assets/car-s.png'>
     </div>
 
     <br>
 
-    <p style='font-weight:800;opacity:.7;margin-bottom:0'>ENVIRONMENTAL SCORE</p>
-    <p style='margin-top:0;opacity:.5'>This car has the following impact on the environment...</p>
+    <p class='infoSectionHeader'>ENVIRONMENTAL SCORE</p>
+
     <div id='envScore' style='background:var(${envBg})'>
         <img src='assets/svg/leaf.svg'>
         ${envDots}
         <p>${capitalize(carInfo[4])}</p>
     </div>
 
+    <p id='scoreExplain'><img src='assets/svg/info.svg'>${scoreExplain}</p>
+
     <br><br>
 
-    <p style='font-weight:800;opacity:.7;margin-bottom:0'>ACCESSIBILITY ACCOMODATIONS</p>
-    <p style='margin-top:0;opacity:.5'>This driver accommodates for the following...</p>
+    <p class='infoSectionHeader'>ACCESSIBILITY ACCOMODATIONS</p>
+    <p class='infoSectionSub'>This driver accommodates for the following...</p>
     ${accom}
+    <div class='gap'></div>
 
-    <button class='confirmButton'>Confirm Ride</button>
-    `
+    
+    <button class='confirmButton' onclick='displayDriver()'>Confirm Ride</button>
+    <button class='confirmButton newRide' onclick='newRide()'>Find a New Ride</button>
+    <button class='confirmButton newRide' onclick='closeModal()'>Back to Map</button>
+
+    <div class='gap'></div>
+    `;
+
+    displayModal(html);
+
 }
 
+//make it look like we're looking for drivers for the sake of realism
+function fakeSearch(){
+    document.getElementById("warning").style["display"] = "none";
+    const loadingPopup = document.getElementById("loadingPopup");
+    loadingPopup.style["opacity"] = 1;
+    loadingPopup.style["pointer-events"] = "all";
+    setTimeout(function(){
+        //keep generating drivers till we get one that matches the user's preferences
+        let driver = generateDriver();
+        let match = false;
+        let accessOpt = JSON.parse(localStorage.getItem("accessOpt"));
+        while(!match){
+            match = true;
+            for(let key in accessOpt){
+                if(accessOpt[key] && driver[5][key] != accessOpt[key]){
+                    match = false;
+                    break;
+                }
+            }
+
+            if(!match){
+                driver = generateDriver();
+            }
+
+        }
+        displayCar(driver);
+        loadingPopup.style["opacity"] = 0;
+        loadingPopup.style["pointer-events"] = "none";
+    }, 800 + Math.random()*800);
+    
+}
+
+function newRide(){
+    closeModal();
+    fakeSearch();
+}
+
+//verify if a valid route has been entered
+function verifyRoute(){
+
+    for(let i of document.getElementsByTagName("span")){
+        if(i.innerHTML.length > 2){
+            if(i.innerHTML.substring(i.innerHTML.length - 2) == "mi"){// if we can find the miles span in the map, then the route has been successfully loaded
+                fakeSearch();
+                return;
+            }
+        }
+    }
+    //show the warning if a route couldn't be found
+    document.getElementById("warning").style["display"] = "block";
+
+}
+
+
+//displays the drivers information after the ride is confirmed
 function displayDriver(){
-    document.getElementById("map").style["display"] = "block";
+    $("#title").text("Ride Confirmed.");
+    closeModal();
+    $("#bottomBar").html(`
+        <div class='horBar'></div>
+        <img id='driverPic' src='assets/driver.png'>
+        <h2 id='driverName'>${currentDriver[0]}</h2>
+        <p id='timeApprox'>${currentDriver[6]} min away</p>
+
+        <div class='smallGap'></div><div class='smallGap'></div>
+
+        <div id='carDisplay'>
+            <div id='carInfo' style=''>
+                <p id='carName'>${currentDriver[2]}</p>
+                <p id='carPlate'>${currentDriver[3]}</p>
+            </div>
+            <img src='assets/car-s.png'>
+        </div>
+        <div class='smallGap'></div>
+    `)
+}
+
+
+
+//user information screen
+function toggleInfoScreen(){
+    const infoScreen = document.getElementById("infoScreen")
+    if(infoScreen.style["pointer-events"] == "all"){
+        infoScreen.style["pointer-events"] = "none";
+        infoScreen.style["opacity"] = 0;
+    }
+    else{
+        infoScreen.style["pointer-events"] = "all";
+        infoScreen.style["opacity"] = 1;
+        displayAccess("#userAccessibility");
+        document.getElementById("nameInput").value = localStorage.getItem("name");//prefill name input
+    }
+}
+
+function saveNameSetting(){
+    localStorage.setItem("name", $("#nameInput").val());
 }
